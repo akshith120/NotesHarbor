@@ -1,11 +1,11 @@
 <h1 align="center">📝 NotesHarbor — MERN Note Taking App ✨</h1>
 
-![Demo App](/frontend/public/screenshot-for-readme.png)
-
 Highlights:
 
 - 🧱 Full-Stack App Built with the MERN Stack (MongoDB, Express, React, Node)
 - ✨ Create, Update, and Delete Notes with Title, Description, and Tags
+- 🏷️ Tag-based categorization with quick search and filtering
+- 🎨 Clean, editorial-inspired UI refresh with focus on clarity
 - 🛠️ Build and Test a Fully Functional REST API
 - ⚙️ Rate Limiting with Upstash Redis — a Real-World Concept Explained Simply
 - 🚀 Completely Responsive UI
