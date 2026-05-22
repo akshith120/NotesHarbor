@@ -1,5 +1,22 @@
 import Note from "../models/Note.js";
 
+function normalizeTags(input) {
+  if (!input) return [];
+
+  const rawTags = Array.isArray(input)
+    ? input
+    : typeof input === "string"
+      ? input.split(",")
+      : [];
+
+  const normalized = rawTags
+    .map((tag) => (typeof tag === "string" ? tag.trim() : ""))
+    .filter(Boolean)
+    .map((tag) => tag.toLowerCase());
+
+  return [...new Set(normalized)].slice(0, 12);
+}
+
 export async function getAllNotes(_, res) {
   try {
     const notes = await Note.find().sort({ createdAt: -1 }); // -1 will sort in desc. order (newest first)
@@ -23,8 +40,8 @@ export async function getNoteById(req, res) {
 
 export async function createNote(req, res) {
   try {
-    const { title, content } = req.body;
-    const note = new Note({ title, content });
+    const { title, content, tags } = req.body;
+    const note = new Note({ title, content, tags: normalizeTags(tags) });
 
     const savedNote = await note.save();
     res.status(201).json(savedNote);
@@ -36,10 +53,10 @@ export async function createNote(req, res) {
 
 export async function updateNote(req, res) {
   try {
-    const { title, content } = req.body;
+    const { title, content, tags } = req.body;
     const updatedNote = await Note.findByIdAndUpdate(
       req.params.id,
-      { title, content },
+      { title, content, tags: normalizeTags(tags) },
       {
         new: true,
       }

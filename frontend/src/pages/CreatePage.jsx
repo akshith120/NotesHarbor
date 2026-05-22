@@ -7,9 +7,17 @@ import api from "../lib/axios";
 const CreatePage = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [tagsInput, setTagsInput] = useState("");
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+
+  const parseTags = (value) => {
+    return value
+      .split(",")
+      .map((tag) => tag.trim())
+      .filter(Boolean);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,6 +32,7 @@ const CreatePage = () => {
       await api.post("/notes", {
         title,
         content,
+        tags: parseTags(tagsInput),
       });
 
       toast.success("Note created successfully!");
@@ -44,50 +53,62 @@ const CreatePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-base-200">
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-2xl mx-auto">
-          <Link to={"/"} className="btn btn-ghost mb-6">
+    <div className="min-h-screen">
+      <div className="page-container py-10">
+        <div className="max-w-3xl">
+          <Link to={"/"} className="ghost-btn mb-6 inline-flex">
             <ArrowLeftIcon className="size-5" />
             Back to Notes
           </Link>
 
-          <div className="card bg-base-100">
-            <div className="card-body">
-              <h2 className="card-title text-2xl mb-4">Create New Note</h2>
-              <form onSubmit={handleSubmit}>
-                <div className="form-control mb-4">
-                  <label className="label">
-                    <span className="label-text">Title</span>
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Note Title"
-                    className="input input-bordered"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                  />
-                </div>
+          <div className="panel p-6 sm:p-8">
+            <h2 className="text-3xl font-semibold text-slate-900">Create a new note</h2>
+            <p className="mt-2 text-sm text-slate-600">
+              Keep it short or write a manifesto. Every idea belongs here.
+            </p>
 
-                <div className="form-control mb-4">
-                  <label className="label">
-                    <span className="label-text">Content</span>
-                  </label>
-                  <textarea
-                    placeholder="Write your note here..."
-                    className="textarea textarea-bordered h-32"
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                  />
-                </div>
+            <form onSubmit={handleSubmit} className="mt-6 space-y-5">
+              <div>
+                <label className="field-label">Title</label>
+                <input
+                  type="text"
+                  placeholder="Note title"
+                  className="field-input mt-2"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+              </div>
 
-                <div className="card-actions justify-end">
-                  <button type="submit" className="btn btn-primary" disabled={loading}>
-                    {loading ? "Creating..." : "Create Note"}
-                  </button>
-                </div>
-              </form>
-            </div>
+              <div>
+                <label className="field-label">Content</label>
+                <textarea
+                  placeholder="Write your note here..."
+                  className="field-input mt-2 min-h-[180px]"
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                />
+              </div>
+
+              <div>
+                <label className="field-label">Tags</label>
+                <input
+                  type="text"
+                  placeholder="design, product, meetings"
+                  className="field-input mt-2"
+                  value={tagsInput}
+                  onChange={(e) => setTagsInput(e.target.value)}
+                />
+                <p className="mt-2 text-xs text-slate-500">
+                  Separate tags with commas to keep your notes organized.
+                </p>
+              </div>
+
+              <div className="flex justify-end">
+                <button type="submit" className="primary-btn" disabled={loading}>
+                  {loading ? "Creating..." : "Create Note"}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>

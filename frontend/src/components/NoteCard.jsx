@@ -23,25 +23,35 @@ const NoteCard = ({ note, setNotes }) => {
   return (
     <Link
       to={`/note/${note._id}`}
-      className="card bg-base-100 hover:shadow-lg transition-all duration-200 
-      border-t-4 border-solid border-[#00FF9D]"
+      className="note-card group"
     >
-      <div className="card-body">
-        <h3 className="card-title text-base-content">{note.title}</h3>
-        <p className="text-base-content/70 line-clamp-3">{note.content}</p>
-        <div className="card-actions justify-between items-center mt-4">
-          <span className="text-sm text-base-content/60">
-            {formatDate(new Date(note.createdAt))}
-          </span>
-          <div className="flex items-center gap-1">
-            <PenSquareIcon className="size-4" />
-            <button
-              className="btn btn-ghost btn-xs text-error"
-              onClick={(e) => handleDelete(e, note._id)}
-            >
-              <Trash2Icon className="size-4" />
-            </button>
+      <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+        <span className="flex items-center gap-2">
+          <PenSquareIcon className="size-4 text-emerald-500" />
+          Note
+        </span>
+        <span>{formatDate(new Date(note.createdAt))}</span>
+      </div>
+      <div className="flex flex-1 flex-col gap-4">
+        <h3 className="text-2xl font-semibold text-slate-900">{note.title}</h3>
+        {note.tags?.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {note.tags.map((tag) => (
+              <span key={tag} className="tag-chip">
+                {tag}
+              </span>
+            ))}
           </div>
+        )}
+        <p className="text-sm leading-relaxed text-slate-600 line-clamp-4">{note.content}</p>
+        <div className="flex items-center justify-between pt-2">
+          <span className="text-xs font-semibold text-emerald-600">Open note</span>
+          <button
+            className="inline-flex items-center justify-center rounded-full border border-transparent bg-red-50 p-2 text-red-500 transition hover:border-red-200"
+            onClick={(e) => handleDelete(e, note._id)}
+          >
+            <Trash2Icon className="size-4" />
+          </button>
         </div>
       </div>
     </Link>
