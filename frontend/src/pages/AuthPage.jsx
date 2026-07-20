@@ -41,24 +41,17 @@ const AuthPage = () => {
           <section className="panel overflow-hidden p-8 sm:p-10">
             <span className="pill">NotesHarbor access</span>
             <h1 className="mt-6 max-w-xl text-4xl font-semibold leading-tight text-slate-900 sm:text-5xl">
-              Keep your notes private, organized, and ready for AI help.
+              Keep your notes private and easy to revisit.
             </h1>
             <p className="mt-4 max-w-2xl text-lg text-slate-600">
-              Sign in or create an account to save notes to your own MongoDB profile, manage tag chips,
-              and use your own Gemini key for on-demand summaries.
+              Sign in or create an account to save your notes, organize tags, and use the workspace.
             </p>
 
-            <div className="mt-8 grid gap-4 sm:grid-cols-3">
-              {[
-                ["JWT auth", "Secure note ownership per account"],
-                ["Tag chips", "Quickly reuse and add custom tags"],
-                ["BYOK AI", "Your key stays in your browser"],
-              ].map(([title, body]) => (
-                <div key={title} className="rounded-3xl border border-slate-200/80 bg-white/80 p-4 shadow-sm">
-                  <p className="text-sm font-semibold text-slate-900">{title}</p>
-                  <p className="mt-2 text-sm text-slate-600">{body}</p>
-                </div>
-              ))}
+            <div className="mt-8 rounded-3xl border border-slate-200/80 bg-white/80 p-5 shadow-sm">
+              <p className="text-sm font-semibold text-slate-900">What you get</p>
+              <p className="mt-2 text-sm text-slate-600">
+                A simple, private notes workspace with tag chips and AI tools you can switch on when you need them.
+              </p>
             </div>
           </section>
 

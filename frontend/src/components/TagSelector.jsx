@@ -8,8 +8,7 @@ const TagSelector = ({
   setTagInput,
   onAddTag,
 }) => {
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleAddClick = () => {
     onAddTag(tagInput);
     setTagInput("");
   };
@@ -42,7 +41,7 @@ const TagSelector = ({
         )}
       </div>
 
-      <form className="flex flex-col gap-3 sm:flex-row" onSubmit={handleSubmit}>
+      <div className="flex flex-col gap-3 sm:flex-row">
         <input
           type="text"
           placeholder="Add a custom tag"
@@ -50,10 +49,10 @@ const TagSelector = ({
           value={tagInput}
           onChange={(e) => setTagInput(e.target.value)}
         />
-        <button type="submit" className="primary-btn sm:w-auto">
+        <button type="button" className="primary-btn sm:w-auto" onClick={handleAddClick}>
           + Add
         </button>
-      </form>
+      </div>
     </div>
   );
 };

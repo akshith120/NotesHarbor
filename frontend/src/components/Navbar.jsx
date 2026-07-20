@@ -1,10 +1,17 @@
 import { Link } from "react-router";
-import { LogOutIcon, PlusIcon } from "lucide-react";
+import { MoonStarIcon, LogOutIcon, PlusIcon, SunMediumIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
+  const [isDarkMode, setIsDarkMode] = useState(() => localStorage.getItem("notesharbor_theme") === "dark");
+
+  useEffect(() => {
+    document.body.dataset.theme = isDarkMode ? "dark" : "light";
+    localStorage.setItem("notesharbor_theme", isDarkMode ? "dark" : "light");
+  }, [isDarkMode]);
 
   return (
     <header className="navbar-shell">
@@ -17,6 +24,10 @@ const Navbar = () => {
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <button type="button" className="ghost-btn" onClick={() => setIsDarkMode((current) => !current)}>
+              {isDarkMode ? <SunMediumIcon className="size-5" /> : <MoonStarIcon className="size-5" />}
+              <span>{isDarkMode ? "Light mode" : "Dark mode"}</span>
+            </button>
             {user && (
               <div className="rounded-full border border-slate-200 bg-white/80 px-4 py-2 text-sm text-slate-600">
                 Signed in as <span className="font-semibold text-slate-900">{user.username}</span>

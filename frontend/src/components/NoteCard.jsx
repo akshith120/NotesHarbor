@@ -97,7 +97,7 @@ const NoteCard = ({ note, setNotes }) => {
               </button>
 
               {menuOpen && (
-                <div className="absolute right-0 z-20 mt-2 w-64 rounded-3xl border border-slate-200 bg-white p-4 shadow-2xl">
+                <div className="absolute bottom-full right-0 z-20 mb-2 w-72 rounded-3xl border border-slate-200 bg-white p-4 shadow-2xl">
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Choose action</p>
                   <div className="mt-3 space-y-2">
                     {[
