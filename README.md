@@ -3,17 +3,23 @@
 Highlights:
 
 - 🧱 Full-Stack App Built with the MERN Stack (MongoDB, Express, React, Node)
-- ✨ Create, Update, and Delete Notes with Title, Description, and Tags
-- 🏷️ Tag-based categorization with quick search and filtering
-- 🎨 Clean, editorial-inspired UI refresh with focus on clarity
-- 🛠️ Build and Test a Fully Functional REST API
-- ⚙️ Rate Limiting with Upstash Redis — a Real-World Concept Explained Simply
-- 🚀 Completely Responsive UI
-- 🌐 Explore HTTP Methods, Status Codes & SQL vs NoSQL
-- 📦 Deployment Guide Included — Add the Live App to Your Resume
-- 📚 Designed for Absolute Beginners
+- ✨ Create, Update, and Delete Notes with Title, Content, and Tags
+- 🏷️ User-scoped tag chips with quick select and custom tag creation
+- 🔐 MongoDB user auth with JWT login and registration
+- 🤖 BYOK Gemini AI summarizer with optional key takeaways mode
+- 🌗 Dark mode, polished surfaces, and clearer UI sections
+- 🚀 Responsive layout with a single Render deployment path
 
 ---
+
+## ✅ Notable Features & Changes
+
+- Notes are now tied to a logged-in user account.
+- Login and registration are handled with JWT-based auth.
+- Tags can be reused from chip blocks or added on demand.
+- Gemini API keys stay in the browser and are tested before saving.
+- Individual notes can be summarized or turned into key takeaways on demand.
+- The UI now includes dark mode, a custom favicon, and stronger visual separation between sections.
 
 ## 🧪 .env Setup
 
@@ -31,6 +37,8 @@ NODE_ENV=development
 ```
 
 The Google Gemini API key is not stored in the backend. Each user saves it locally in the browser from the app's Settings card.
+
+When you save a Gemini key, the app verifies it through the backend and then stores it only in localStorage.
 
 ## 🔧 Run the Backend
 

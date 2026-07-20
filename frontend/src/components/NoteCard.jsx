@@ -47,10 +47,12 @@ const NoteCard = ({ note, setNotes }) => {
       setAiResult(response);
       setMenuOpen(false);
     } catch (error) {
-      if (error.status === 429) {
+      const status = error.response?.status;
+
+      if (status === 429) {
         toast.error("Gemini rate limit reached. Try again later.");
       } else {
-        toast.error(error.message || "Failed to generate AI assist output");
+        toast.error(error.response?.data?.message || error.message || "Failed to generate AI assist output");
       }
     } finally {
       setRunningAi(false);

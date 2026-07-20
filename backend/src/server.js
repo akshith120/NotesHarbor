@@ -6,6 +6,7 @@ import { fileURLToPath } from "url";
 
 import notesRoutes from "./routes/notesRoutes.js";
 import authRoutes from "./routes/auth.js";
+import geminiRoutes from "./routes/gemini.js";
 import { connectDB } from "./config/db.js";
 import rateLimiter from "./middleware/rateLimiter.js";
 
@@ -35,6 +36,7 @@ app.use(rateLimiter);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/notes", notesRoutes);
+app.use("/api/gemini", geminiRoutes);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../../frontend/dist")));

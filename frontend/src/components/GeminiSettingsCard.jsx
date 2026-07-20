@@ -31,12 +31,16 @@ const GeminiSettingsCard = () => {
       setStatus({ type: "success", message: "Gemini key verified and saved locally." });
       toast.success("Gemini key saved");
     } catch (error) {
-      if (error.status === 401 || error.status === 403) {
+      const status = error.response?.status;
+
+      if (status === 401 || status === 403) {
         setStatus({ type: "error", message: "That key was rejected. Check the API key and permissions." });
-      } else if (error.status === 429) {
+      } else if (status === 429) {
         setStatus({ type: "error", message: "Gemini rate limit reached. Try again later." });
+      } else if (status === 400) {
+        setStatus({ type: "error", message: error.response?.data?.message || "Enter a valid Gemini API key." });
       } else {
-        setStatus({ type: "error", message: "Could not verify the Gemini key right now." });
+        setStatus({ type: "error", message: error.response?.data?.message || "Could not verify the Gemini key right now." });
       }
     } finally {
       setTesting(false);
