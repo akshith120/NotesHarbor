@@ -5,6 +5,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 import notesRoutes from "./routes/notesRoutes.js";
+import authRoutes from "./routes/auth.js";
 import { connectDB } from "./config/db.js";
 import rateLimiter from "./middleware/rateLimiter.js";
 
@@ -32,6 +33,7 @@ app.use(rateLimiter);
 //   next();
 // });
 
+app.use("/api/auth", authRoutes);
 app.use("/api/notes", notesRoutes);
 
 if (process.env.NODE_ENV === "production") {

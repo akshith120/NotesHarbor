@@ -25,8 +25,12 @@ MONGO_URI=<your_mongo_uri>
 UPSTASH_REDIS_REST_URL=<your_redis_rest_url>
 UPSTASH_REDIS_REST_TOKEN=<your_redis_rest_token>
 
+JWT_SECRET=<your_jwt_secret>
+
 NODE_ENV=development
 ```
+
+The Google Gemini API key is not stored in the backend. Each user saves it locally in the browser from the app's Settings card.
 
 ## 🔧 Run the Backend
 

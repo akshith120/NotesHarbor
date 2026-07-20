@@ -1,22 +1,49 @@
 import { ArrowLeftIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router";
 import api from "../lib/axios";
+import TagSelector from "../components/TagSelector";
+import { normalizeTag, normalizeTags } from "../lib/utils";
 
 const CreatePage = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [tagsInput, setTagsInput] = useState("");
+  const [availableTags, setAvailableTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [tagInput, setTagInput] = useState("");
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
-  const parseTags = (value) => {
-    return value
-      .split(",")
-      .map((tag) => tag.trim())
-      .filter(Boolean);
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        const res = await api.get("/notes/tags");
+        setAvailableTags(res.data || []);
+      } catch (error) {
+        console.log("Error loading tags", error);
+      }
+    };
+
+    fetchTags();
+  }, []);
+
+  const handleToggleTag = (tag) => {
+    setSelectedTags((currentTags) =>
+      currentTags.includes(tag) ? currentTags.filter((currentTag) => currentTag !== tag) : [...currentTags, tag]
+    );
+  };
+
+  const handleAddTag = (value) => {
+    const normalizedTag = normalizeTag(value);
+
+    if (!normalizedTag) {
+      return;
+    }
+
+    setAvailableTags((currentTags) => normalizeTags([...currentTags, normalizedTag]));
+    setSelectedTags((currentTags) => normalizeTags([...currentTags, normalizedTag]));
   };
 
   const handleSubmit = async (e) => {
@@ -32,7 +59,7 @@ const CreatePage = () => {
       await api.post("/notes", {
         title,
         content,
-        tags: parseTags(tagsInput),
+        tags: selectedTags,
       });
 
       toast.success("Note created successfully!");
@@ -91,16 +118,19 @@ const CreatePage = () => {
 
               <div>
                 <label className="field-label">Tags</label>
-                <input
-                  type="text"
-                  placeholder="design, product, meetings"
-                  className="field-input mt-2"
-                  value={tagsInput}
-                  onChange={(e) => setTagsInput(e.target.value)}
-                />
                 <p className="mt-2 text-xs text-slate-500">
-                  Separate tags with commas to keep your notes organized.
+                  Click a chip to select it, or add a new custom tag below.
                 </p>
+                <div className="mt-4">
+                  <TagSelector
+                    availableTags={availableTags}
+                    selectedTags={selectedTags}
+                    onToggleTag={handleToggleTag}
+                    tagInput={tagInput}
+                    setTagInput={setTagInput}
+                    onAddTag={handleAddTag}
+                  />
+                </div>
               </div>
 
               <div className="flex justify-end">

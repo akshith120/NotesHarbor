@@ -6,6 +6,7 @@ import api from "../lib/axios";
 import toast from "react-hot-toast";
 import NoteCard from "../components/NoteCard";
 import NotesNotFound from "../components/NotesNotFound";
+import GeminiSettingsCard from "../components/GeminiSettingsCard";
 
 const HomePage = () => {
   const [isRateLimited, setIsRateLimited] = useState(false);
@@ -67,8 +68,8 @@ const HomePage = () => {
 
       <main className="page-container pb-16">
         <section className="pt-10 pb-10">
-          <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-            <div>
+          <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+            <div className="panel p-6 sm:p-8">
               <span className="pill">Your workspace</span>
               <h2 className="mt-5 text-4xl font-semibold leading-tight text-slate-900 sm:text-5xl">
                 Write fast. Think clearer.
@@ -77,20 +78,22 @@ const HomePage = () => {
                 Capture the spark, shape it into something meaningful, and keep every thought easy to
                 find. NotesHarbor keeps your notes calm, clean, and ready for action.
               </p>
-            </div>
-            <div className="panel p-5 sm:p-6">
-              <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-600">
-                  <span className="text-xl font-semibold">TB</span>
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-slate-700">Today at a glance</p>
+
+              <div className="mt-8 flex flex-wrap gap-4">
+                <div className="rounded-3xl border border-slate-200/80 bg-white/80 px-5 py-4 shadow-sm">
+                  <p className="text-sm text-slate-500">Total notes</p>
                   <p className="text-2xl font-semibold text-slate-900">
                     {notes.length} {notes.length === 1 ? "note" : "notes"}
                   </p>
                 </div>
+                <div className="rounded-3xl border border-slate-200/80 bg-white/80 px-5 py-4 shadow-sm">
+                  <p className="text-sm text-slate-500">Tag library</p>
+                  <p className="text-2xl font-semibold text-slate-900">Saved chips</p>
+                </div>
               </div>
             </div>
+
+            <GeminiSettingsCard />
           </div>
         </section>
 

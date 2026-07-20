@@ -4,12 +4,16 @@ import { Link, useNavigate, useParams } from "react-router";
 import api from "../lib/axios";
 import toast from "react-hot-toast";
 import { ArrowLeftIcon, LoaderIcon, Trash2Icon } from "lucide-react";
+import TagSelector from "../components/TagSelector";
+import { normalizeTag, normalizeTags } from "../lib/utils";
 
 const NoteDetailPage = () => {
   const [note, setNote] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [tagsInput, setTagsInput] = useState("");
+  const [availableTags, setAvailableTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [tagInput, setTagInput] = useState("");
 
   const navigate = useNavigate();
 
@@ -18,9 +22,10 @@ const NoteDetailPage = () => {
   useEffect(() => {
     const fetchNote = async () => {
       try {
-        const res = await api.get(`/notes/${id}`);
-        setNote(res.data);
-        setTagsInput((res.data.tags || []).join(", "));
+        const [noteRes, tagsRes] = await Promise.all([api.get(`/notes/${id}`), api.get("/notes/tags")]);
+        setNote(noteRes.data);
+        setAvailableTags(tagsRes.data || []);
+        setSelectedTags(normalizeTags(noteRes.data.tags || []));
       } catch (error) {
         console.log("Error in fetching note", error);
         toast.error("Failed to fetch the note");
@@ -46,10 +51,24 @@ const NoteDetailPage = () => {
   };
 
   const parseTags = (value) => {
-    return value
-      .split(",")
-      .map((tag) => tag.trim())
-      .filter(Boolean);
+    return normalizeTags(value);
+  };
+
+  const handleToggleTag = (tag) => {
+    setSelectedTags((currentTags) =>
+      currentTags.includes(tag) ? currentTags.filter((currentTag) => currentTag !== tag) : [...currentTags, tag]
+    );
+  };
+
+  const handleAddTag = (value) => {
+    const normalizedTag = normalizeTag(value);
+
+    if (!normalizedTag) {
+      return;
+    }
+
+    setAvailableTags((currentTags) => normalizeTags([...currentTags, normalizedTag]));
+    setSelectedTags((currentTags) => normalizeTags([...currentTags, normalizedTag]));
   };
 
   const handleSave = async () => {
@@ -63,7 +82,7 @@ const NoteDetailPage = () => {
     try {
       await api.put(`/notes/${id}`, {
         ...note,
-        tags: parseTags(tagsInput),
+        tags: parseTags(selectedTags),
       });
       toast.success("Note updated successfully");
       navigate("/");
@@ -112,7 +131,7 @@ const NoteDetailPage = () => {
                   type="text"
                   placeholder="Note title"
                   className="field-input mt-2"
-                  value={note.title}
+                  value={note?.title || ""}
                   onChange={(e) => setNote({ ...note, title: e.target.value })}
                 />
               </div>
@@ -122,23 +141,26 @@ const NoteDetailPage = () => {
                 <textarea
                   placeholder="Write your note here..."
                   className="field-input mt-2 min-h-[200px]"
-                  value={note.content}
+                  value={note?.content || ""}
                   onChange={(e) => setNote({ ...note, content: e.target.value })}
                 />
               </div>
 
               <div>
                 <label className="field-label">Tags</label>
-                <input
-                  type="text"
-                  placeholder="design, product, meetings"
-                  className="field-input mt-2"
-                  value={tagsInput}
-                  onChange={(e) => setTagsInput(e.target.value)}
-                />
                 <p className="mt-2 text-xs text-slate-500">
-                  Separate tags with commas so you can filter later.
+                  Toggle existing chips or add a custom tag for this note.
                 </p>
+                <div className="mt-4">
+                  <TagSelector
+                    availableTags={availableTags}
+                    selectedTags={selectedTags}
+                    onToggleTag={handleToggleTag}
+                    tagInput={tagInput}
+                    setTagInput={setTagInput}
+                    onAddTag={handleAddTag}
+                  />
+                </div>
               </div>
 
               <div className="flex justify-end">

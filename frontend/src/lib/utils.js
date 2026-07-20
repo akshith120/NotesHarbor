@@ -5,3 +5,15 @@ export function formatDate(date) {
     year: "numeric",
   });
 }
+
+export function normalizeTag(tag) {
+  if (typeof tag !== "string") {
+    return "";
+  }
+
+  return tag.trim().toLowerCase();
+}
+
+export function normalizeTags(tags) {
+  return [...new Set(tags.map(normalizeTag).filter(Boolean))];
+}
